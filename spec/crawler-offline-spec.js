@@ -1,6 +1,10 @@
 var	Crawler = require('../lib/Crawler.js'),
 	dnsMock = require('./mock/dns.js');
 
+/*
+ * Tests crawler in offline mode, just how methods are operates to control
+ * basic crawler setup and logic
+ */
 describe('Crawler instance', function(){
 	var crawler = new Crawler();
 
@@ -18,7 +22,6 @@ describe('Crawler instance', function(){
 
 	it('overrides default dns resolver', function(){
 		crawler.setup('resolveHost', dnsMock);
-
 		expect(crawler._resolveHost).toBeDefined();
 		expect(crawler._resolveHost.original).toBe(dnsMock);
 	});
