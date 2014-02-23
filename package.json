@@ -1,0 +1,21 @@
+{
+  "name": "lycosa",
+  "description": "General purpose HTTP crawler",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xphoenix/lycosa.git"
+  },
+  "dependencies": {
+    "when": "2.8.0"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.13.1",
+    "request": "^2.34.0",
+    "express": "^3.4.8"
+  },
+  "scripts": {
+    "test": "./node_modules/jasmine-node/bin/jasmine-node ."
+  },
+  "private": true
+}
