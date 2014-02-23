@@ -1,0 +1,13 @@
+{
+  "name": "Crawler",
+  "description": "General purpose HTTP crawler library",
+  "version": "0.0.1",
+  "options": {
+    "linkNatives": "true",
+    "attributesEmit": "true",
+    "paths": [
+      "./lib"
+    ],
+    "outdir": "./docs"
+  }
+}
