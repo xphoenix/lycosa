@@ -43,4 +43,11 @@ describe('Host crawling session', function(){
 		expect(session.selectIp(list)).toBe('127.0.0.1');
 	});
 
+	it('allows all by default', function(){
+		var session = new HostSession();
+		expect(session.isAllowed('')).toBe(true);
+		expect(session.isAllowed('/abc')).toBe(true);
+		expect(session.isAllowed('12387r	wk .qmwe /qwlke ')).toBe(true);
+	});
+
 });
