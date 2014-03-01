@@ -23,7 +23,7 @@ Server.prototype.start = function(startcb){
 
 	// Serve files from data dir
 	this._app.get(/^(.+)$/, function(req, res){
-	     res.sendfile( __dirname + '/data/' + req.params[0]);
+	     res.sendfile( __dirname + '/www/' + req.params[0]);
 	});
 
 	// Start server
