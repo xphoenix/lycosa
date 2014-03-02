@@ -1,5 +1,6 @@
 var when = require('when'),
 	Crawler = require('../lib/Crawler.js'),
+	HostSession = require('../lib/HostSession'),
 	dnsMock = require('./mock/dns-mock.js');
 
 /*
@@ -8,11 +9,10 @@ var when = require('when'),
  */
 describe('Crawler instance', function() {
 
-	it('overrides default resolveHost behaviour', function(done){
-		var crawler = new Crawler();
-		crawler.setup('resolveHost', dnsMock);
-		expect(crawler._behaviors.resolveHost).toBeDefined();
+	var crawler = new Crawler();
+	crawler.setup('resolveHost', dnsMock);
 
+	it('overrides default resolveHost behaviour', function(done){
 		var t1 = crawler._behave('resolveHost', null, 'good.com').then(function(ip){
             expect(ip.time).toBeGreaterThan(0);
             expect(ip.time).toBeLessThan(10);
@@ -30,10 +30,13 @@ describe('Crawler instance', function() {
 		}, done).otherwise(done);
 	});
 
-//	it('creates host sessions', function(done){
-//		var crawler = new Crawler();
-//		crawler.setup('createHostSession', function(){
-//
-//		});
-//	});
+	it('creates and destroyes host sessions', function(done){
+		crawler._sessions.get(1000, 'bad.com', 'seq', 'good.com').then(function(result){
+            expect(result.time).toBeGreaterThan(0);
+            expect(result.time).toBeLessThan(10);
+			expect(result.value).toBeDefined();
+			expect(result.value instanceof HostSession).toBe(true);
+			done();
+		}, done).otherwise(done);
+	});
 });

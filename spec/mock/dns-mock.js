@@ -4,7 +4,7 @@ var dns = {
 	"bad.com": '',
 };
 
-module.exports = function(crawler, seq, host, callback) {
+module.exports = function(seq, host, callback) {
 	if (dns.hasOwnProperty(host)) {
 		callback(null, dns[host]);
 	} else {
