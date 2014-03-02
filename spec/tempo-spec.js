@@ -37,8 +37,8 @@ describe('TemporaryObject factory', function(){
 
 	it('passes parameters to create function', function(done){
 		var factory = new TFactory(buildAction, slowDestroyAction);
-		factory.get(100, 'test', 'a', {test: 'hello world'}).then(function (value){
-			expect(value).toEqual('test: a, {"test":"hello world"}');
+		factory.get(100, 'test', 'prefix', 'a', {test: 'hello world'}).then(function (value){
+			expect(value).toEqual('prefix: a, {"test":"hello world"}');
 			done();
 		}).otherwise(done);
 	});
@@ -47,8 +47,8 @@ describe('TemporaryObject factory', function(){
 		// It takes 1s to create and to destroy object
 		var factory = new TFactory(function() {
 			return delay(1000, "Hello world")
-		}, function(key, value) {
-			return delay(1000, "Bye world");
+		}, function(msg) {
+			return delay(1000, msg);
 		});
 
 		var stage = 0, start = Date.now();
@@ -66,7 +66,7 @@ describe('TemporaryObject factory', function(){
 			stage = 1;
 		}, done).otherwise(done);
 
-		factory.destroy('test').then(function(value){
+		factory.destroy('test', 'Bye world').then(function(value){
 			// that is called 2.0 seconds after
 			// 1.0s - to create
 			// 0.5s - timeout (goes in parallel with creation)
@@ -88,8 +88,8 @@ describe('TemporaryObject factory', function(){
 		// It takes 0s to create and to destroy object
 		var factory = new TFactory(function() {
 			return when.resolve("Hello world");
-		}, function(key, value) {
-			return when.resolve("Bye world");
+		}, function(msg) {
+			return when.resolve(msg);
 		});
 
 		var stage = 0, start = Date.now();
@@ -107,7 +107,7 @@ describe('TemporaryObject factory', function(){
 			stage = 1;
 		}, done).otherwise(done);
 
-		factory.destroy('test').then(function(value){
+		factory.destroy('test', 'Bye world').then(function(value){
 			// that is called 1.0 seconds after
 			// 0.0s - to create
 			// 1.0s - timeout (goes in parallel with creation)
@@ -129,8 +129,8 @@ describe('TemporaryObject factory', function(){
 		// It takes 0s to create and to destroy object
 		var factory = new TFactory(function() {
 			return when.resolve("Hello world - "+Date.now());
-		}, function(key, value) {
-			return delay(1000, "Bye world");
+		}, function(msg) {
+			return delay(1000, msg);
 		});
 
 		var stage = 0, obj, start = Date.now();
@@ -141,7 +141,7 @@ describe('TemporaryObject factory', function(){
 
 		// First time we destroy object 100ms after creation.
 		// Destroy itself takes 1second to complete
-		factory.destroy('test').then(function(value){
+		factory.destroy('test', 'Bye world').then(function(value){
 			var delta = Date.now() - start;
 
 			// check
