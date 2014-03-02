@@ -8,6 +8,7 @@ var when = require('when'),
  * Tests crawler in offline mode, just how methods are operates to control
  * basic crawler setup and logic
  */
+// TODO: add tests for the corner cases, like calling behavior with a wrong name, e.t.c
 describe('Crawler instance', function() {
 
 	var crawler = new Crawler();
