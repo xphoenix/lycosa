@@ -69,7 +69,7 @@ describe('Crawler instance', function() {
 		});
 
 		crawler._schedulers.get(500, 'bad.com', 'seq', '127.0.0.1').then(function(result){
-            expect(result.time).toBeGreaterThan(0);
+            expect(result.time).toBeGreaterThan(-1);
             expect(result.time).toBeLessThan(11);
 			expect(result.value).toBeDefined();
 			expect(result.value instanceof RequestScheduler).toBe(true);
