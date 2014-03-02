@@ -2,6 +2,7 @@ var when = require('when'),
 	delay = require('when/delay'),
 	TFactory = require('../lib/tempo/TemporaryObjectFactory.js');
 
+// TODO add tests for the errors during build/destroy actions
 describe('TemporaryObject factory', function(){
 
 	var buildAction = function(key, param1, param2) {
