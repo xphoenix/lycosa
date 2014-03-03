@@ -43,7 +43,7 @@ describe('Crawler instance', function() {
 		});
 
 		crawler._sessions.get(1000, 'bad.com', 'seq', 'bad.com').then(function(result){
-            expect(result.time).toBeGreaterThan(0);
+            expect(result.time).toBeGreaterThan(-1);
             expect(result.time).toBeLessThan(11);
 			expect(result.value).toBeDefined();
 			expect(result.value instanceof HostSession).toBe(true);
