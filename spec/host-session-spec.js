@@ -7,10 +7,11 @@ describe('Host crawling session', function(){
 		expect(session._crawlDelay).toBe(1000);
 		expect(session._rules).toEqual({});
 		expect(session._sentRequestCount).toBe(0);
-		expect(session._lastRequestTime).toBe(0);
+
+		expect(session._lastRequestTime).toBe(false);
+		expect(session.timeToWait()).toBe(0);
 
 		expect(session.age() >= 0).toBe(true);
-		expect(session.timeToWait()).toBe(0);
 	});
 
 	it('selects IP', function(){
