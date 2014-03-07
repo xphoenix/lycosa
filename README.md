@@ -1,4 +1,4 @@
 lycosa
 ======
 
-Crawler lin
+Generic HTTP crawler library
