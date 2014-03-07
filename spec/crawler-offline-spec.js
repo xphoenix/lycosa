@@ -1,4 +1,5 @@
 var when = require('when'),
+	matchers = require('./jasmine/matchers.js'),
 	Crawler = require('../lib/Crawler.js'),
 	HostSession = require('../lib/HostSession.js'),
 	RequestScheduler = require('../lib/RequestScheduler.js'),
@@ -14,16 +15,18 @@ describe('Crawler instance', function() {
 	var crawler = new Crawler();
 	crawler.setup('resolveHost', dnsMock);
 
+	beforeEach(function(){
+		this.addMatchers(matchers);
+	});
+
 	it('overrides default resolveHost behaviour', function(done){
 		var t1 = crawler._behave('resolveHost', null, 'good.com').then(function(ip){
-            expect(ip.time).toBeGreaterThan(0);
-            expect(ip.time).toBeLessThan(10);
+            expect(ip.time).toBeInRange(0, 10);
 			expect(ip.value).toEqual('127.0.0.1');
 		});
 
 		var t2 = crawler._behave('resolveHost', null, 'bad.com').then(function(ip){
-            expect(ip.time).toBeGreaterThan(0);
-            expect(ip.time).toBeLessThan(10);
+            expect(ip.time).toBeInRange(0, 10);
 			expect(ip.value).toEqual('');
 		});
 
@@ -43,16 +46,14 @@ describe('Crawler instance', function() {
 		});
 
 		crawler._sessions.get(1000, 'bad.com', 'seq', 'bad.com').then(function(result){
-            expect(result.time).toBeGreaterThan(-1);
-            expect(result.time).toBeLessThan(11);
+            expect(result.time).toBeInRange(0, 10);
 			expect(result.value).toBeDefined();
 			expect(result.value instanceof HostSession).toBe(true);
 		}, done).otherwise(done);
 
 		// Crawler will take care of passing correct session object into the destroy action
 		crawler._sessions.destroy('bad.com', 'seq', 'session here').then(function(result) {
-            expect(result.time).toBeGreaterThan(-1);
-            expect(result.time).toBeLessThan(10);
+            expect(result.time).toBeInRange(0, 10);
 			expect(result.value).toBe('session here');
 			done();
 		}, done).otherwise(done);
@@ -70,16 +71,14 @@ describe('Crawler instance', function() {
 		});
 
 		crawler._schedulers.get(500, 'bad.com', 'seq', '127.0.0.1').then(function(result){
-            expect(result.time).toBeGreaterThan(-1);
-            expect(result.time).toBeLessThan(11);
+            expect(result.time).toBeInRange(0, 10);
 			expect(result.value).toBeDefined();
 			expect(result.value instanceof RequestScheduler).toBe(true);
 		}, done).otherwise(done);
 
 		// Crawler will take care of passing correct session object into the destroy action
 		crawler._schedulers.destroy('bad.com', 'seq', 'scheduler here').then(function(result) {
-            expect(result.time).toBeGreaterThan(-1);
-            expect(result.time).toBeLessThan(10);
+            expect(result.time).toBeInRange(0, 10);
 			expect(result.value).toBe('scheduler here');
 			done();
 		}, done).otherwise(done);

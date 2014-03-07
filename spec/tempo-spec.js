@@ -1,5 +1,6 @@
 var when = require('when'),
 	delay = require('when/delay'),
+	matchers = require('./jasmine/matchers.js'),
 	TFactory = require('../lib/tempo/TemporaryObjectFactory.js');
 
 // TODO add tests for the errors during build/destroy actions
@@ -16,6 +17,10 @@ describe('TemporaryObject factory', function(){
 	var slowDestroyAction = function(key, value) {
 		return delay(1000, value);
 	};
+
+	beforeEach(function(){
+		this.addMatchers(matchers);
+	});
 
 	it('must has buildAction', function(){
 		expect(function(){
@@ -60,8 +65,7 @@ describe('TemporaryObject factory', function(){
 			// check
 			expect(stage).toBe(0);
 			expect(value).toBe('Hello world');
-            expect(delta).toBeGreaterThan(999);
-            expect(delta).toBeLessThan(1010);
+			expect(delta).toBeInRange(1000, 1010);
 
 			// passed
 			stage = 1;
@@ -77,8 +81,7 @@ describe('TemporaryObject factory', function(){
 			// check
 			expect(stage).toBe(1);
 			expect(value).toBe('Bye world');
-            expect(delta).toBeGreaterThan(1999);
-            expect(delta).toBeLessThan(2010);
+			expect(delta).toBeInRange(2000, 2010);
 
             // passed
             done();
@@ -101,8 +104,7 @@ describe('TemporaryObject factory', function(){
 			// check
 			expect(stage).toBe(0);
 			expect(value).toBe('Hello world');
-            expect(delta).toBeGreaterThan(-1);
-            expect(delta).toBeLessThan(10);
+			expect(delta).toBeInRange(0, 10);
 
 			// passed
 			stage = 1;
@@ -118,8 +120,7 @@ describe('TemporaryObject factory', function(){
 			// check
 			expect(stage).toBe(1);
 			expect(value).toBe('Bye world');
-            expect(delta).toBeGreaterThan(999);
-            expect(delta).toBeLessThan(1010);
+			expect(delta).toBeInRange(1000, 1010);
 
             // passed
             done();
@@ -148,8 +149,7 @@ describe('TemporaryObject factory', function(){
 			// check
 			expect(stage).toBe(1);
 			expect(value).toBe('Bye world');
-            expect(delta).toBeGreaterThan(1099);
-            expect(delta).toBeLessThan(1110);
+			expect(delta).toBeInRange(1100, 1110);
 
             // passed
             stage = 2;
@@ -167,8 +167,7 @@ describe('TemporaryObject factory', function(){
 				// AFTER destroy
 				expect(stage).toBe(2);
 				expect(obj === value).toBe(false);
-	            expect(delta).toBeGreaterThan(1099);
-	            expect(delta).toBeLessThan(1110);
+				expect(delta).toBeInRange(1100, 1110);
 
 				done();
 			}, done).otherwise(done);

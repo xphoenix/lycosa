@@ -1,9 +1,14 @@
 var url = require('url'),
 	when = require('when'),
+	matchers = require('./jasmine/matchers.js'),
 	RequestScheduler = require('../lib/RequestScheduler.js'),
 	HostSession = require('../lib/HostSession.js');
 
 describe('Request scheduler', function(){
+
+	beforeEach(function(){
+		this.addMatchers(matchers);
+	});
 
 	it('has defaults', function(){
 		var rq = new RequestScheduler();
@@ -57,8 +62,7 @@ describe('Request scheduler', function(){
 			var delta = Date.now() - start;
 			expect(u).toBe(obj);
 			expect(stage).toBe(0);
-            expect(delta).toBeGreaterThan(-1);
-            expect(delta).toBeLessThan(10);
+			expect(delta).toBeInRange(0, 10);
 
             stage = 1;
             session.requestSent();
@@ -68,8 +72,7 @@ describe('Request scheduler', function(){
 			var delta = Date.now() - start;
 			expect(u2).toBe(obj);
 			expect(stage).toBe(1);
-            expect(delta).toBeGreaterThan(1000);
-            expect(delta).toBeLessThan(1010);
+			expect(delta).toBeInRange(1000, 1010);
 			done();
 		}, done).otherwise(done);
 	});
@@ -98,8 +101,7 @@ describe('Request scheduler', function(){
 			var delta = times[1] - times[0];
 
 			// 1 second passed
-            expect(delta >= 1000).toBe(true);
-            expect(delta < 1010).toBe(true);
+			expect(delta).toBeInRange(1000, 1010);
 
             done();
 		}, done).otherwise(done);
@@ -157,22 +159,16 @@ describe('Request scheduler', function(){
 
 		when.join(r1, r2, r3, r4).then(function(){
 			expect(s1times.length).toBe(2);
-			expect((s1times[1] - s1times[0]) >= 2000).toBe(true);
-			expect((s1times[1] - s1times[0]) < 2010).toBe(true);
+			expect(s1times[1] - s1times[0]).toBeInRange(2000, 2010);
 
 			expect(s2times.length).toBe(2);
-			expect((s2times[1] - s2times[0]) >= 2000).toBe(true);
-			expect((s2times[1] - s2times[0]) < 2010).toBe(true);
+			expect(s2times[1] - s2times[0]).toBeInRange(2000, 2010);
 
 			expect(iptimes.length).toBe(4);
-			expect((iptimes[1] - iptimes[0]) >= 500).toBe(true);
-			expect((iptimes[1] - iptimes[0]) < 510).toBe(true);
+			expect(iptimes[1] - iptimes[0]).toBeInRange(500, 510);
+			expect(iptimes[2] - iptimes[1]).toBeInRange(1500, 1510);
+			expect(iptimes[3] - iptimes[2]).toBeInRange(500, 510);
 
-			expect((iptimes[2] - iptimes[1]) >= 1500).toBe(true);
-			expect((iptimes[2] - iptimes[1]) < 1510).toBe(true);
-
-			expect((iptimes[3] - iptimes[2]) >= 500).toBe(true);
-			expect((iptimes[3] - iptimes[2]) < 510).toBe(true);
 			done();
 		}, done).otherwise(done);
 	});
