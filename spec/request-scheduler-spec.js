@@ -54,24 +54,22 @@ describe('Request scheduler', function(){
 
 	it('schedules request', function(done){
 		var session = new HostSession(1000), rq = new RequestScheduler();
-
 		var u = url.parse('http://www.google.com'),	u2 = url.parse('http://www.google.com/robots.txt');
 
 		var stage = 0, start = Date.now();
-		rq.schedule(session, u).then(function(obj){
+		rq.schedule(session, u).then(function(time){
 			var delta = Date.now() - start;
-			expect(u).toBe(obj);
 			expect(stage).toBe(0);
+			expect(time).toBeInRange(0, 10);
 			expect(delta).toBeInRange(0, 10);
 
             stage = 1;
-            session.requestSent();
 		}, done).otherwise(done);
 
-		rq.schedule(session, u2).then(function(obj){
+		rq.schedule(session, u2).then(function(time){
 			var delta = Date.now() - start;
-			expect(u2).toBe(obj);
 			expect(stage).toBe(1);
+			expect(time).toBeInRange(1000, 1010);
 			expect(delta).toBeInRange(1000, 1010);
 			done();
 		}, done).otherwise(done);
@@ -92,7 +90,6 @@ describe('Request scheduler', function(){
 		// 1st request
 		rq.schedule(session, url.parse('http://google.com')).then(function(){
 			times.push(Date.now());
-			session.requestSent();
 		}, done).otherwise(done);
 
 		// 2st stuck as 1st use all available connections
@@ -108,7 +105,7 @@ describe('Request scheduler', function(){
 
 		// 500ms emulates first request end
 		setTimeout(function(){
-			rq.requestDone();
+			rq.requestEnd();
 		}, 500);
 	});
 
@@ -123,7 +120,6 @@ describe('Request scheduler', function(){
 			var t = Date.now();
 			s1times.push(t);
 			iptimes.push(t);
-			session1.requestSent();
 
 			expect(order).toBe(0);
 			order = 1;
@@ -132,7 +128,6 @@ describe('Request scheduler', function(){
 			var t = Date.now();
 			s1times.push(t);
 			iptimes.push(t);
-			session1.requestSent();
 
 			expect(order).toBe(2);
 			order = 3;
@@ -142,7 +137,6 @@ describe('Request scheduler', function(){
 			var t = Date.now();
 			s2times.push(t);
 			iptimes.push(t);
-			session2.requestSent();
 
 			expect(order).toBe(1);
 			order = 2;
@@ -151,7 +145,6 @@ describe('Request scheduler', function(){
 			var t = Date.now();
 			s2times.push(t);
 			iptimes.push(t);
-			session2.requestSent();
 
 			expect(order).toBe(3);
 			order = 4;
