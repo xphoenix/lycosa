@@ -83,4 +83,7 @@ describe('Crawler instance', function() {
 			done();
 		}, done).otherwise(done);
 	});
+
+	//TODO: check that unset behaviors return rejected promises
+	//TODO: Test that crawl multiple URLs are not trying to resolve same host multiple times
 });
