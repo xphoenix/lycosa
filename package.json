@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "when": "2.8.0",
-    "node-url-utils": "^0.3.0"
+    "node-url-utils": "^0.3.0",
+    "moment": "^2.5.1",
+    "tough-cookie": "^0.12.1"
   },
   "devDependencies": {
     "jasmine-node": "^1.13.1",
