@@ -19,8 +19,8 @@ describe('Host crawling session', function(){
 	it('selects IP', function(){
 		var session = new HostSession();
 
-		expect(function(){session.selectIp()}).toThrow();
-		expect(function(){session.selectIp([])}).toThrow();
+		expect(session.selectIp()).toBe(undefined);
+		expect(session.selectIp([])).toBe(undefined);
 
 		for (var i=0; i < 20; i++) {
 			session.requestAdded();
