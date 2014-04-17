@@ -63,6 +63,11 @@ describe('Crawler instance', function() {
 		});
 
 		crawler.crawl(['http://google.com']).then(function(result){
+<<<<<<< HEAD
+=======
+			console.log(JSON.stringify(result, null, 4));
+
+>>>>>>> branch 'master' of git@github.com:xphoenix/lycosa.git
 			expect(result.pages.length).toBe(1);
 			expect(result.entries.length).toBe(1);
 
