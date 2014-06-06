@@ -87,4 +87,8 @@ describe('Crawler instance', function() {
 			done();
 		}, done).otherwise(done);
 	});
+
+	it('follows redirects', function(done){
+
+	});
 });
